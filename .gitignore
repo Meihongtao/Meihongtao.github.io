@@ -1,0 +1,16 @@
+# Jekyll 构建产物
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Ruby / Bundler
+Gemfile.lock
+vendor/
+.bundle/
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
