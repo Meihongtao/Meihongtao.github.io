@@ -1,0 +1,23 @@
+---
+layout: default
+---
+<div class="home">
+  {{ content }}
+
+  {% assign posts = site.pages | where_exp: "p", "p.layout == 'post'" | sort: "date" | reverse %}
+  {% if posts.size > 0 %}
+  <h2 class="section-title">文章</h2>
+  <div class="post-grid">
+    {% for p in posts %}
+    <a class="post-card" href="{{ p.url | relative_url }}">
+      <h3 class="post-card-title">{{ p.title | default: p.name }}</h3>
+      {% if p.description %}<p class="post-card-desc">{{ p.description }}</p>{% endif %}
+      <div class="post-card-meta">
+        {% if p.date %}<span>{{ p.date | date: "%Y-%m-%d" }}</span>{% endif %}
+        {% for tag in p.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>

@@ -1,5 +1,10 @@
-
-# Qwen3ASR 
+---
+layout: post
+title: Qwen3-ASR 技术报告阅读笔记
+description: 音频编码器 AuT、四阶段训练流程、以及基于 LLM 的非自回归强制对齐器 ForcedAligner 的梳理与理解。
+date: 2026-09-17
+tags: [语音识别, Qwen3-ASR, 论文笔记]
+---
 
 最近笔者一直在基于Qwen3ASR这个模型做一些语音识别的系统的开发工作，Qwen3ASR这篇论文也是阅读了很多次，但是一直没有做什么整理性质的文字工作，为此简单记录一些我的理解和一些工程上的实践。如有疏漏，欢迎指出。
 

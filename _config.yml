@@ -1,0 +1,35 @@
+title: Meiht
+description: Meiht 的主页 —— 语音识别与多模态相关的学习笔记
+author: Meiht
+
+# 站点地址（用户主页仓库，baseurl 留空）
+url: "https://meihongtao.github.io"
+baseurl: ""
+
+# 构建
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+
+# 默认布局：博客文章自动套用 post 布局
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: "blogs"
+    values:
+      layout: "post"
+
+# 文件排除
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
