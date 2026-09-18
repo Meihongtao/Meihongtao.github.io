@@ -16,6 +16,11 @@
   --accent-soft:   #eaf1ff;
   --accent-hover:  #1a5fd6;
 
+  /* 提示框（callout）配色 */
+  --warn:          #b45309;
+  --warn-soft:     #fff8eb;
+  --warn-border:   #f0c680;
+
   --radius:        12px;
   --radius-sm:     8px;
   --shadow-sm:     0 1px 2px rgba(16, 24, 40, .05);
@@ -47,6 +52,10 @@
     --accent:       #6b9bff;
     --accent-soft:  #16233d;
     --accent-hover: #8ab0ff;
+
+    --warn:        #f0b429;
+    --warn-soft:   #2a2113;
+    --warn-border: #5c4a1f;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
     --shadow:    0 4px 16px rgba(0, 0, 0, .45);
@@ -245,7 +254,12 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
   color: var(--text-faint);
 }
 
-.post-tags { display: inline-flex; gap: 6px; }
+.post-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
 
 .tag {
   display: inline-block;
@@ -324,6 +338,37 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
 .post-content blockquote p { margin: 0 0 .7em; }
 .post-content blockquote p:last-child { margin-bottom: 0; }
 
+/* 提示框：用于需要突出的结论 / 实践提醒 */
+
+.callout {
+  margin: 1.8em 0;
+  padding: 16px 22px 18px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+}
+
+.callout > :last-child { margin-bottom: 0; }
+
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-weight: 650;
+  font-size: 15.5px;
+  color: var(--accent);
+}
+
+.callout-warn {
+  border-color: var(--warn-border);
+  border-left-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.callout-warn .callout-title { color: var(--warn); }
+
 /* 行内代码 */
 
 .post-content code {
@@ -359,15 +404,15 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
 
 /* 表格 */
 
+/* 不要给 table 设 display: block：那会让 thead/tbody 退化成匿名表格，
+   各自按内容收缩并左对齐，表头与表体列宽错位，看着像"表格没居中"。
+   保持原生 table 布局，宽度与正文列一致即可。 */
+
 .post-content table {
   width: 100%;
   margin: 1.6em 0;
   border-collapse: collapse;
   font-size: 14.5px;
-  /* 超宽表格（如 AAS 对比）在窄屏横向滚动，表头与表体列宽保持一致 */
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap;
 }
 
 .post-content th,
@@ -375,6 +420,10 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
   padding: 10px 14px;
   border-bottom: 1px solid var(--border-soft);
   text-align: left;
+  /* 必须用 anywhere 而不是 break-word：只有 anywhere 会参与 intrinsic
+     尺寸计算，表格才能真正收缩进容器；break-word 不影响 min-content，
+     列多时表格仍会把整页撑宽。 */
+  overflow-wrap: anywhere;
 }
 
 .post-content thead th {
@@ -406,12 +455,12 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
   box-shadow: var(--shadow);
 }
 
-/* ---------- 表格 / 代码块 / 图表突破正文列 ---------- */
+/* ---------- 代码块 / 图表突破正文列 ---------- */
 
 /* 正文列占视口的 82%，两侧各余 9%；宽内容按正文列宽的 110% 居中扩张，
-   每侧只多占 5% < 9%，因此任意视口宽度下都不会溢出，无需媒体查询。 */
+   每侧只多占 5% < 9%，因此任意视口宽度下都不会溢出，无需媒体查询。
+   表格不参与突破：与正文等宽即可，靠 overflow-wrap:anywhere 收缩换行。 */
 
-.post-content > table,
 .post-content > pre,
 .post-content > .vad-chart {
   width: 110%;
@@ -459,7 +508,6 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
   /* 小屏回到铺满，避免 82% 把内容挤窄 */
   .container { max-width: 100%; padding: 0 18px; }
   /* 小屏无余量可扩张，取消突破，避免横向溢出 */
-  .post-content > table,
   .post-content > pre,
   .post-content > .vad-chart {
     width: 100%;
@@ -471,6 +519,8 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
   .post-content { font-size: 16px; }
   .post-card { padding: 18px 20px; }
   .post-content table { font-size: 13.5px; }
+  .post-content th,
+  .post-content td { padding: 8px 10px; }
   .site-nav { gap: 16px; }
 }
 
