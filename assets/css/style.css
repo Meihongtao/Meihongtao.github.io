@@ -28,7 +28,12 @@
   --font-mono:  "JetBrains Mono", "SFMono-Regular", Consolas,
                 "Liberation Mono", Menlo, monospace;
 
-  --maxw: 780px;
+  --maxw: 880px;
+  /* 宽屏下表格 / 图表 / 代码块可突破正文宽度，减少两侧留白 */
+  --maxw-wide: 1060px;
+  --gutter: 24px;
+  /* 突破量：宽内容相对正文列每侧向外溢出的距离 */
+  --breakout: calc((var(--maxw-wide) - (var(--maxw) - var(--gutter) * 2)) / 2);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -402,6 +407,19 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
   height: auto;
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow);
+}
+
+/* ---------- 宽屏：宽内容突破正文列，减少两侧留白 ---------- */
+
+@media (min-width: 1180px) {
+  .post-content > table,
+  .post-content > pre,
+  .post-content > .vad-chart {
+    /* 正文列内宽 = --maxw - 2*--gutter；每侧向外扩 --breakout，整体仍相对页面居中 */
+    width: calc(100% + var(--breakout) * 2);
+    margin-left: calc(var(--breakout) * -1);
+    margin-right: calc(var(--breakout) * -1);
+  }
 }
 
 /* 文末返回 */
