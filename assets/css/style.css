@@ -28,12 +28,9 @@
   --font-mono:  "JetBrains Mono", "SFMono-Regular", Consolas,
                 "Liberation Mono", Menlo, monospace;
 
-  --maxw: 880px;
-  /* 宽屏下表格 / 图表 / 代码块可突破正文宽度，减少两侧留白 */
-  --maxw-wide: 1060px;
-  --gutter: 24px;
-  /* 突破量：宽内容相对正文列每侧向外溢出的距离 */
-  --breakout: calc((var(--maxw-wide) - (var(--maxw) - var(--gutter) * 2)) / 2);
+  /* 正文列宽 = 视口的 82%，上限 1440px（超宽屏下防止单行过长）。
+     82% + 5% + 5% = 92% < 100%，所以下面宽内容的突破规则无需媒体查询。 */
+  --maxw: min(82%, 1440px);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -409,17 +406,17 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
   box-shadow: var(--shadow);
 }
 
-/* ---------- 宽屏：宽内容突破正文列，减少两侧留白 ---------- */
+/* ---------- 表格 / 代码块 / 图表突破正文列 ---------- */
 
-@media (min-width: 1180px) {
-  .post-content > table,
-  .post-content > pre,
-  .post-content > .vad-chart {
-    /* 正文列内宽 = --maxw - 2*--gutter；每侧向外扩 --breakout，整体仍相对页面居中 */
-    width: calc(100% + var(--breakout) * 2);
-    margin-left: calc(var(--breakout) * -1);
-    margin-right: calc(var(--breakout) * -1);
-  }
+/* 正文列占视口的 82%，两侧各余 9%；宽内容按正文列宽的 110% 居中扩张，
+   每侧只多占 5% < 9%，因此任意视口宽度下都不会溢出，无需媒体查询。 */
+
+.post-content > table,
+.post-content > pre,
+.post-content > .vad-chart {
+  width: 110%;
+  margin-left: -5%;
+  margin-right: -5%;
 }
 
 /* 文末返回 */
@@ -459,7 +456,16 @@ main.container { flex: 1 0 auto; padding-top: 40px; padding-bottom: 64px; }
 /* ---------- 响应式 ---------- */
 
 @media (max-width: 640px) {
-  .container { padding: 0 18px; }
+  /* 小屏回到铺满，避免 82% 把内容挤窄 */
+  .container { max-width: 100%; padding: 0 18px; }
+  /* 小屏无余量可扩张，取消突破，避免横向溢出 */
+  .post-content > table,
+  .post-content > pre,
+  .post-content > .vad-chart {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
   main.container { padding-top: 28px; padding-bottom: 48px; }
   .hero { padding: 12px 0 32px; margin-bottom: 32px; }
   .post-content { font-size: 16px; }
